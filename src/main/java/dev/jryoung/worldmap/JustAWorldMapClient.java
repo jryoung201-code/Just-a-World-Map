@@ -6,10 +6,13 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.chunk.ChunkStatus;
 import org.lwjgl.glfw.GLFW;
 
 public final class JustAWorldMapClient implements ClientModInitializer {
+    private static final KeyBinding.Category CATEGORY =
+            KeyBinding.Category.create(Identifier.of("just_a_world_map"));
     private static KeyBinding openMap;
     private static KeyBinding addWaypoint;
     private static KeyBinding cycleTag;
@@ -17,14 +20,11 @@ public final class JustAWorldMapClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         openMap = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.just_a_world_map.open_map", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_M,
-                "category.just_a_world_map"));
+                "key.just_a_world_map.open_map", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_M, CATEGORY));
         addWaypoint = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.just_a_world_map.add_waypoint", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_N,
-                "category.just_a_world_map"));
+                "key.just_a_world_map.add_waypoint", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_N, CATEGORY));
         cycleTag = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.just_a_world_map.cycle_tag", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_B,
-                "category.just_a_world_map"));
+                "key.just_a_world_map.cycle_tag", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_B, CATEGORY));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> tick(client));
     }
@@ -32,7 +32,8 @@ public final class JustAWorldMapClient implements ClientModInitializer {
     private static void tick(MinecraftClient client) {
         if (client.world == null || client.player == null) return;
 
-        MapData data = MapData.forWorld(client.world);
+        long seed = client.getServer() == null ? 0L : client.getServer().getOverworld().getSeed();
+        MapData data = MapData.forWorld(client.world, seed);
         int centerX = client.player.getChunkPos().x;
         int centerZ = client.player.getChunkPos().z;
         int radius = client.options.getViewDistance().getValue();
