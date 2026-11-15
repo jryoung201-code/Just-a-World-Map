@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "id": "just_a_world_map",
+  "version": "${version}",
+  "name": "Just a World Map",
+  "description": "A seed-aware map that records explored chunks and supports tagged waypoints.",
+  "authors": ["JR_25736"],
+  "environment": "client",
+  "entrypoints": { "client": ["dev.jryoung.worldmap.JustAWorldMapClient"] },
+  "depends": {
+    "fabricloader": ">=0.18.1",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
