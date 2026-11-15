@@ -1,7 +1,6 @@
 package dev.jryoung.worldmap;
 
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.util.math.BlockPos;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,8 +29,7 @@ final class MapData {
         load();
     }
 
-    static MapData forWorld(ClientWorld world) {
-        long seed = world.getSeed();
+    static MapData forWorld(ClientWorld world, long seed) {
         String dimension = world.getRegistryKey().getValue().toString();
         if (current == null || current.seed != seed || !current.dimension.equals(dimension)) {
             current = new MapData(seed, dimension);
